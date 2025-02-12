@@ -51,4 +51,19 @@ describe("PasswordKeeper", async function() {
 
         await expect(contract.connect(user2).changePassword("ab", nonce + 1, signature, expiredTime)).to.be.revertedWithCustomError(contract, "MessageExpired");
     })
+
+    it("should still password", async function() {
+        const { owner, user2, contract } = await loadFixture(deploy)
+        const slot = [1, 2, 3, 4]
+
+        const addr = await contract.getAddress()
+
+        slot.forEach(
+            sl => getStorageAt(addr, sl)//Convert Hex to ASCII => 0x616263 => abc
+        )
+    })
+
+    function getStorageAt(add: string, slot: number) {
+        ethers.provider.getStorage(add, slot).then(v => console.log(v))
+    }
 })
